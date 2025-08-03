@@ -3,7 +3,7 @@ document.getElementById("pingButton").addEventListener("click", async () => {
   responseArea.textContent = "Sending ping...";
 
   try {
-    const res = await fetch("http://localhost:8000/test_ping");
+    const res = await fetch("http://localhost:8000/test/test_ping");
     const data = await res.json();
     responseArea.textContent = data.message;
   } catch (err) {
