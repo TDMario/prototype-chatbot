@@ -3,13 +3,40 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Chatbot Prototype</title>
+  <title>LLM Chat Interface</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <h1>Chatbot Prototype</h1>
-  <button id="pingButton">Ping Backend</button>
-  <p id="responseArea">Waiting...</p>
+  <header>
+    <div class="toolbar">
+      <button id="pingButton">Ping</button>
+      <select id="modelSelector">
+        <option value="default">Default</option>
+        <!-- Dynamisch befüllt über JS -->
+      </select>
+    </div>
+  </header>
+
+  <main>
+    <section class="chat-section">
+      <textarea id="promptInput" placeholder="Write your message here..."></textarea>
+      <button id="sendPrompt">Send</button>
+    </section>
+
+    <section class="documents-section">
+      <h2>Documents</h2>
+      <input type="file" id="uploadInput" />
+      <button id="uploadButton">Upload</button>
+      <ul id="documentList">
+        <!-- Dynamisch befüllt -->
+      </ul>
+    </section>
+
+    <section class="response-section">
+      <h2>Response</h2>
+      <div id="responseOutput">Your answer will appear here.</div>
+    </section>
+  </main>
 
   <script src="js/main.js"></script>
 </body>

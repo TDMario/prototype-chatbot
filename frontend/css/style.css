@@ -1,24 +1,115 @@
+/* Grundlayout */
 body {
-  font-family: system-ui, sans-serif;
-  padding: 2rem;
-  background-color: #f0f2f5;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #fdfafa;
+  color: #333;
 }
 
-button {
-  padding: 0.6rem 1.2rem;
-  font-size: 1rem;
-  background-color: #007bff;
+/* Header */
+header {
+  background-color: #ffe6e6;
+  padding: 1rem;
+  border-bottom: 2px solid #f5c2c2;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.toolbar button,
+.toolbar select {
+  padding: 0.5rem 1rem;
   border: none;
-  border-radius: 4px;
-  color: white;
+  border-radius: 10px;
+  background-color: #ffcccc;
+  color: #333;
+  font-weight: bold;
   cursor: pointer;
 }
 
-button:hover {
-  background-color: #0056b3;
+.toolbar button:hover,
+.toolbar select:hover {
+  background-color: #ffb3b3;
 }
 
-p {
-  margin-top: 1rem;
+/* Hauptbereich */
+main {
+  padding: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: space-between;
+}
+
+/* Sektionen */
+section {
+  flex: 1 1 30%;
+  background-color: #fff5f5;
+  border: 1px solid #f5cccc;
+  border-radius: 15px;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(255, 192, 203, 0.2);
+}
+
+/* Chat */
+.chat-section textarea {
+  width: 95%;
+  height: 150px;
+  padding: 1rem;
+  border: 1px solid #f3bdbd;
+  border-radius: 10px;
+  resize: vertical;
+  margin-bottom: 1rem;
   font-size: 1rem;
+}
+
+.chat-section button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #ff9999;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.chat-section button:hover {
+  background-color: #ff7a7a;
+}
+
+/* Dokumente */
+.documents-section h2,
+.response-section h2 {
+  margin-top: 0;
+}
+
+#documentList {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+}
+
+#documentList li {
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  background-color: #ffecec;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Antwort */
+.response-section #responseOutput {
+  background-color: #fff;
+  border: 1px solid #f2c2c2;
+  padding: 1rem;
+  border-radius: 10px;
+  min-height: 100px;
+  white-space: pre-wrap;
 }
