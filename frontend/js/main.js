@@ -30,15 +30,12 @@ document.addEventListener("DOMContentLoaded", () => {
         modelSelector.appendChild(option);
       });
 
-      // 🟢 EventListener nach dem Laden einbinden
       modelSelector.addEventListener("change", () => {
-        console.log("Service switched to:", modelSelector.value);
+        console.log("[modelSelector] Changed to:", modelSelector.value);
         loadDocuments();
       });
 
-      // 🟢 Initial einmal laden (mit Default oder erster Option)
       loadDocuments();
-
     } catch (error) {
       console.error("Failed to load services:", error);
     }
@@ -50,10 +47,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!prompt) return;
 
     const selectedModel = modelSelector.value || "default";
-
-    // === Checkbox-Dateien einsammeln ===
     const selectedFileIds = Array.from(document.querySelectorAll(".doc-checkbox:checked"))
       .map(cb => cb.value);
+
+    responseOutput.textContent = "Awaiting answer ...";
 
     try {
       const res = await fetch(`http://localhost:8000/chat?service=${selectedModel}`, {
@@ -61,10 +58,17 @@ document.addEventListener("DOMContentLoaded", () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt, file_ids: selectedFileIds }),
       });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        responseOutput.textContent = `Fehler: ${errorData.detail?.error || "Unkown error"}`;
+        return;
+      }
+
       const data = await res.json();
-      responseOutput.textContent = data.response || "[No response]";
+      responseOutput.textContent = data.response || "[Keine Antwort erhalten]";
     } catch (error) {
-      responseOutput.textContent = "Error fetching response.";
+      responseOutput.textContent = "Error creating the answer, try again later";
       console.error("Chat error:", error);
     }
   });

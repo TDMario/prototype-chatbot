@@ -10,6 +10,8 @@ async function loadDocuments() {
   list.innerHTML = '';
   documents.forEach(doc => {
     const li = document.createElement('li');
+    li.classList.add('document-item');
+
     const label = document.createElement('label');
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
@@ -17,9 +19,12 @@ async function loadDocuments() {
     checkbox.classList.add('doc-checkbox');
     label.appendChild(checkbox);
     label.appendChild(document.createTextNode(' ' + (doc.name || doc.filename || "Unnamed")));
+
     const deleteBtn = document.createElement('button');
     deleteBtn.textContent = 'Delete';
+    deleteBtn.classList.add('doc-delete-button');
     deleteBtn.onclick = () => deleteDocument(checkbox.value);
+
     li.appendChild(label);
     li.appendChild(deleteBtn);
     list.appendChild(li);
@@ -43,6 +48,7 @@ async function uploadDocument() {
   });
 
   fileInput.value = '';
+  document.getElementById('fileNameLabel').textContent = 'Keine ausgewählt';
   loadDocuments();
 }
 
@@ -62,10 +68,15 @@ document.getElementById('uploadButton').addEventListener('click', uploadDocument
 window.addEventListener('DOMContentLoaded', () => {
   loadDocuments();
 
-  // Servicewechsel führt zu erneutem Laden
   const modelSelector = document.getElementById('modelSelector');
   modelSelector.addEventListener('change', () => {
     console.log("[modelSelector] Changed to:", modelSelector.value);
     loadDocuments();
+  });
+
+  const fileInput = document.getElementById('uploadInput');
+  const fileNameLabel = document.getElementById('fileNameLabel');
+  fileInput.addEventListener('change', function () {
+    fileNameLabel.textContent = this.files.length ? this.files[0].name : 'Keine ausgewählt';
   });
 });

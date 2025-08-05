@@ -25,8 +25,12 @@
 
     <section class="documents-section">
       <h2>Documents</h2>
-      <input type="file" id="uploadInput" />
-      <button id="uploadButton">Upload</button>
+      <div class="upload-container">
+        <span id="fileNameLabel" class="filename-display">No file selected</span>
+        <label for="uploadInput" class="doc-button">Select file</label>
+        <input type="file" id="uploadInput" style="display: none;" />
+        <button id="uploadButton" class="doc-button">Upload</button>
+      </div>
       <ul id="documentList">
         <!-- Dynamisch befüllt -->
       </ul>
