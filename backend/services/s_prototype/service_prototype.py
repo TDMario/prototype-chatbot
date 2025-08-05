@@ -19,32 +19,36 @@ class PrototypeService(ChatServiceBase):
 
     def chat(self, prompt: str, file_ids: Optional[List[str]] = None) -> str:
         try:
+            # 1. Leeren Thread erstellen
             thread = client.beta.threads.create()
+
+            # 2. Nachricht hinzufügen (JETZT mit file_ids!)
             client.beta.threads.messages.create(
                 thread_id=thread.id,
                 role="user",
                 content=prompt,
-                file_ids=file_ids or [],
+                attachments=[{"file_id": fid, "tools": [{"type": "file_search"}]} for fid in (file_ids or [])]
             )
 
-            run = client.beta.threads.runs.create(
+            # 3. Run starten
+            run = client.beta.threads.runs.create_and_poll(
                 thread_id=thread.id,
                 assistant_id=ASSISTANT_ID,
             )
 
-            # Warten bis abgeschlossen
-            while True:
-                run = client.beta.threads.runs.retrieve(thread_id=thread.id, run_id=run.id)
-                if run.status == "completed":
-                    break
-                elif run.status in ["failed", "cancelled"]:
-                    raise ServiceError("OpenAI run failed", code=500)
-            
+            # 4. Antwort holen
             messages = client.beta.threads.messages.list(thread_id=thread.id)
-            return messages.data[0].content[0].text.value.strip()
+            for msg in reversed(messages.data):
+                if msg.role == "assistant":
+                    return msg.content[0].text.value.strip()
+
+            raise ServiceError("No assistant reply found.", code=500)
 
         except OpenAIError as e:
             raise ServiceError(f"OpenAI API error: {str(e)}", code=500)
+
+
+
 
     def list_documents(self) -> List[Dict]:
         try:

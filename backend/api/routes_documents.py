@@ -3,6 +3,7 @@
 from fastapi import APIRouter, Request, UploadFile, File, HTTPException
 from backend.services.service_registry import SERVICE_REGISTRY, DEFAULT_SERVICE_KEY
 from backend.core.exceptions import ServiceError
+import os
 
 router = APIRouter()
 
@@ -20,6 +21,8 @@ async def upload_document(request: Request, file: UploadFile = File(...)):
     try:
         service_key = request.query_params.get("service", DEFAULT_SERVICE_KEY)
         service = SERVICE_REGISTRY.get(service_key, SERVICE_REGISTRY[DEFAULT_SERVICE_KEY])
+
+        os.makedirs("temp_uploads", exist_ok=True)
 
         # Temporäre Speicherung auf Disk (Pfad kann angepasst werden)
         file_location = f"temp_uploads/{file.filename}"
