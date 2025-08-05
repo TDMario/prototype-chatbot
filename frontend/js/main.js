@@ -29,6 +29,16 @@ document.addEventListener("DOMContentLoaded", () => {
         option.textContent = key.charAt(0).toUpperCase() + key.slice(1);
         modelSelector.appendChild(option);
       });
+
+      // 🟢 EventListener nach dem Laden einbinden
+      modelSelector.addEventListener("change", () => {
+        console.log("Service switched to:", modelSelector.value);
+        loadDocuments();
+      });
+
+      // 🟢 Initial einmal laden (mit Default oder erster Option)
+      loadDocuments();
+
     } catch (error) {
       console.error("Failed to load services:", error);
     }
@@ -40,11 +50,16 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!prompt) return;
 
     const selectedModel = modelSelector.value || "default";
+
+    // === Checkbox-Dateien einsammeln ===
+    const selectedFileIds = Array.from(document.querySelectorAll(".doc-checkbox:checked"))
+      .map(cb => cb.value);
+
     try {
       const res = await fetch(`http://localhost:8000/chat?service=${selectedModel}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt }),
+        body: JSON.stringify({ prompt, file_ids: selectedFileIds }),
       });
       const data = await res.json();
       responseOutput.textContent = data.response || "[No response]";
@@ -54,10 +69,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // === 4. (Platzhalter) Dokumentenlogik vorbereiten ===
-  // Hier kannst du z. B. Upload, Delete, List ansprechen
-  // via /documents (GET, POST, DELETE)
-
-  // Init
+  // === Init ===
   loadServices();
 });

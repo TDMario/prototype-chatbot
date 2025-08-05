@@ -53,14 +53,19 @@ class PrototypeService(ChatServiceBase):
     def list_documents(self) -> List[Dict]:
         try:
             files = client.files.list()
-            return [{"id": f.id, "filename": f.filename, "created_at": f.created_at} for f in files.data]
+            return [
+                {"id": f.id, "name": f.filename, "created_at": f.created_at}
+                for f in files.data
+            ]
         except OpenAIError as e:
             raise ServiceError(f"Failed to list documents: {str(e)}", code=500)
+
 
     def upload_document(self, file_path: str, filename: Optional[str] = None) -> Dict:
         try:
             with open(file_path, "rb") as f:
                 uploaded_file = client.files.create(file=f, purpose="assistants")
+                print("[UPLOAD] File uploaded:", uploaded_file.id, uploaded_file.filename)
             return {"id": uploaded_file.id, "filename": uploaded_file.filename}
         except OpenAIError as e:
             raise ServiceError(f"Failed to upload document: {str(e)}", code=500)
